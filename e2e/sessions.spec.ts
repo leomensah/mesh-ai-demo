@@ -55,7 +55,7 @@ test('the timeline shows an earlier query as it was, with a way back to the late
   await expect(page).toHaveURL(/\/3$/);
 });
 
-test('the question header shows what was searched and lets you edit the question', async ({ page }) => {
+test('the question card shows what was searched for a follow-up', async ({ page }) => {
   await page.getByRole('link', { name: /^Open session: Outline engagement/ }).click();
   const used = page.getByRole('button', { name: 'Used earlier queries' });
   await expect(used).toHaveAttribute('aria-expanded', 'false');
@@ -63,8 +63,43 @@ test('the question header shows what was searched and lets you edit the question
   await expect(used).toHaveAttribute('aria-expanded', 'true');
   await expect(page.getByText('Mesh-AI searched for')).toBeVisible();
   await expect(page.getByText('Your follow-up, read together with queries 1 and 2.')).toBeVisible();
-  await page.getByRole('link', { name: 'Edit question' }).click();
-  await expect(page.getByLabel('Your question or search')).toHaveValue('Write this up as a report I can share with my team');
+});
+
+test('Edit turns the card into a text box on the results page; Esc cancels', async ({ page }) => {
+  await page.getByRole('link', { name: /^Open session: Outline engagement/ }).click();
+  await page.getByRole('button', { name: 'Edit', exact: true }).click();
+  await expect(page).toHaveURL(/\/3$/);
+  const box = page.getByRole('textbox', { name: 'Edit question' });
+  await expect(box).toBeFocused();
+  await expect(box).toHaveValue('Write this up as a report I can share with my team');
+  await expect(page.getByText('Searching starts a new session with no filters.')).toBeVisible();
+  await box.fill('   ');
+  await expect(page.getByRole('button', { name: 'Search', exact: true })).toBeDisabled();
+  await box.press('Escape');
+  await expect(box).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Edit', exact: true })).toBeFocused();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Write this up as a report I can share with my team');
+});
+
+test('searching an edited question starts a new session with no filters, with a way back', async ({ page }) => {
+  await page.getByRole('link', { name: /^Open session: Outline engagement/ }).click();
+  await expect(page.getByRole('button', { name: 'Filters, 1 applied' })).toBeVisible();
+  const original = page.url();
+  await page.getByRole('button', { name: 'Edit', exact: true }).click();
+  const box = page.getByRole('textbox', { name: 'Edit question' });
+  await box.fill('How could we involve local schools in Kilifi?');
+  await box.press('Enter');
+  await expect(page).toHaveURL(/#\/s\/ses_\w+\/1$/);
+  expect(page.url()).not.toBe(original);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('How could we involve local schools in Kilifi?');
+  await expect(page.getByRole('button', { name: 'Filters', exact: true })).toBeVisible();
+  await expect(page.getByText('No filters applied, so all public TGHN resources are searched.')).toBeVisible();
+  await expect(page.getByText('New session started')).toBeVisible();
+  await page.getByRole('button', { name: /^Back/ }).click();
+  await expect(page).toHaveURL(original);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Write this up as a report I can share with my team');
+  await page.getByRole('link', { name: 'All sessions' }).click();
+  await expect(page.getByText('How could we involve local schools in Kilifi?')).toBeVisible();
 });
 
 test('the session timeline stays in the margin at laptop widths', async ({ page }) => {

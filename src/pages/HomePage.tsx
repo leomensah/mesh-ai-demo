@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router';
-import type { AnswerFormat, Filters } from '@/api/types';
 import { Composer } from '@/components/home/Composer';
 import { Examples } from '@/components/home/Examples';
 import { RecentSessions } from '@/components/home/RecentSessions';
@@ -11,18 +10,10 @@ import { emptyFilters } from '@/lib/filters';
 import { useSortedSessions } from '@/store/sessions';
 import { TOPICS } from '@/api/mock/topics';
 
-/** Prefill passed by "Edit" on the results page. */
-interface EditState {
-  text?: string;
-  format?: AnswerFormat | 'auto';
-  filters?: Filters;
-}
-
 export function HomePage() {
   const sessions = useSortedSessions();
   const { startSession } = useSessionActions();
   const location = useLocation();
-  const prefill = (location.state ?? {}) as EditState;
 
   useEffect(() => {
     document.title = 'Mesh-AI';
@@ -40,9 +31,7 @@ export function HomePage() {
         </div>
         <Composer
           key={location.key}
-          initialText={prefill.text}
-          initialFormat={prefill.format}
-          initialFilters={prefill.filters ?? emptyFilters()}
+          initialFilters={emptyFilters()}
           onSearch={(text, filters, format) => startSession(text.trim() || TOPICS.malaria.question, filters, format, 'home')}
         />
         <RecentSessions sessions={sessions} />

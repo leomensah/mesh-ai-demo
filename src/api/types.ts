@@ -12,7 +12,7 @@ export type AnswerFormat = 'resources' | 'summary' | 'paragraph' | 'report';
 
 export type QueryTrigger = 'new_search' | 'follow_up' | 'filters_changed';
 
-export type SessionOrigin = 'home' | 'example';
+export type SessionOrigin = 'home' | 'example' | 'edit';
 
 export interface Resource {
   id: string;

@@ -19,7 +19,7 @@ export function ResultsPage() {
   const { sessionId = '', n = '' } = useParams();
   const session = useSessions((s) => s.sessions.find((x) => x.id === sessionId));
   const updateQuery = useSessions((s) => s.updateQuery);
-  const { followUp, changeFilters } = useSessionActions();
+  const { followUp, changeFilters, editAsNewSession } = useSessionActions();
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [highlighted, setHighlighted] = useState<number | null>(null);
 
@@ -60,7 +60,7 @@ export function ResultsPage() {
         <SessionTimeline session={session} current={query.n} />
         <main className="flex min-w-0 flex-col gap-[18px]">
           <section aria-label="Question" className="flex flex-col gap-4">
-            <QuestionHeader key={query.id} query={query} />
+            <QuestionHeader key={query.id} query={query} onEdit={(text) => editAsNewSession(session, query, text)} />
             <FormatSwitch query={query} onChange={(f) => updateQuery(session.id, query.n, { formatChosen: f })} />
           </section>
           <AnswerCard

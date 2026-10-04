@@ -13,7 +13,7 @@ function Shell() {
   return (
     <>
       <Outlet />
-      <Toaster position="bottom-center" toastOptions={{ className: 'font-sans' }} />
+      <Toaster position="bottom-center" offset={{ top: 74, bottom: 24 }} mobileOffset={{ top: 118, bottom: 16 }} toastOptions={{ className: 'font-sans' }} />
     </>
   );
 }
