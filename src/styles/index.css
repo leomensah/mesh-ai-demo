@@ -1,0 +1,151 @@
+@import "tailwindcss";
+@import "./fonts.css";
+
+/* Design tokens from the approved Mesh-AI mockup. Use them as Tailwind classes, e.g. bg-surface, text-muted, border-line. */
+@theme {
+  --font-sans: "Source Sans 3 Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Source Serif 4 Variable", Georgia, "Times New Roman", serif;
+
+  --color-bg: #f4f6f5;
+  --color-surface: #ffffff;
+  --color-ink: #15241f;
+  --color-ink-2: #33443d;
+  --color-muted: #56675f;
+  --color-muted-2: #6a7a73;
+  --color-line: #dde3e0;
+  --color-line-2: #edf0ee;
+  --color-field: #c9d2cd;
+  --color-primary: #0e6b55;
+  --color-primary-hover: #0b5a47;
+  --color-primary-ink: #0a4f3f;
+  --color-tint: #e7f2ed;
+  --color-tint-line: #a9c9bc;
+  --color-ai: #8a4208;
+  --color-ai-dot: #c26a1e;
+  --color-soft: #eef2f0;
+  --color-danger: #8a2c1f;
+}
+
+@layer base {
+  html,
+  body {
+    margin: 0;
+  }
+  body {
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a {
+    color: var(--color-primary);
+  }
+  a:hover {
+    color: var(--color-primary-hover);
+  }
+  button {
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+  }
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition: none !important;
+      animation: none !important;
+    }
+  }
+}
+
+/* Long-form answer text: serif, generous line height, citation pins inline. */
+@layer components {
+  .prose-answer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-family: var(--font-serif);
+    font-size: 16px;
+    line-height: 1.65;
+    color: #1c2b26;
+  }
+  .prose-answer p {
+    margin: 0;
+    text-wrap: pretty;
+  }
+  .prose-answer ul {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    list-style: disc;
+  }
+  .prose-answer h3 {
+    margin: 0;
+    font-family: var(--font-sans);
+    font-size: 19px;
+    line-height: 1.35;
+    font-weight: 700;
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+  .prose-answer h4 {
+    margin: 4px 0 0;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-ink);
+  }
+  .prose-answer .meta {
+    margin-top: -8px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    color: var(--color-muted-2);
+  }
+  .timeline-line::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 14px;
+    bottom: 14px;
+    width: 1px;
+    background: var(--color-line);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  border-radius: 6px;
+  background: linear-gradient(90deg, #eef2f0 0%, #f7f9f8 50%, #eef2f0 100%);
+  background-size: 800px 100%;
+  animation: shimmer 1.4s linear infinite;
+}
+.caret::after {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -2px;
+  background: var(--color-ai-dot);
+  animation: blink 1s steps(2, start) infinite;
+}
+@keyframes blink {
+  to { visibility: hidden; }
+}
