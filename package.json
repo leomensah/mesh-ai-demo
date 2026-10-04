@@ -4,6 +4,9 @@
   "version": "0.1.0",
   "type": "module",
   "description": "Clickable prototype of the Mesh-AI search interface for The Global Health Network.",
+  "engines": {
+    "node": "22.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

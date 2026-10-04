@@ -44,6 +44,15 @@ Routes use the URL hash (`#/s/ses_abc/2`), so both builds work from a file or a 
 
 To host on S3: `aws s3 sync dist/ s3://YOUR_BUCKET --delete`, then serve the bucket through CloudFront.
 
+### Deploying on Vercel
+
+The repository includes `vercel.json`, so no settings need changing:
+
+1. Go to [vercel.com/new](https://vercel.com/new) and import `leomensah/mesh-ai-demo` (give Vercel access to the repository if asked).
+2. Leave the detected settings (Vite, `npm run build`, output `dist`) and select **Deploy**.
+
+Every push to `main` then deploys to production, and every other branch or pull request gets its own preview link. Routes use the URL hash, so no rewrite rules are needed. To use the real service, add `VITE_API_URL` under the project's Environment Variables and redeploy.
+
 ## Connecting the real service
 
 All data goes through one interface, `MeshApi` in `src/api/client.ts`:
