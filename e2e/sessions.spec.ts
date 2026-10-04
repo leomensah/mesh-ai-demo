@@ -37,7 +37,8 @@ test('a follow-up is added to the session and uses its context', async ({ page }
   await page.getByLabel('Ask a follow-up question in this session').fill('How could we involve local schools?');
   await page.getByRole('button', { name: 'Ask follow-up' }).click();
   await expect(page).toHaveURL(/\/2$/);
-  await expect(page.getByText('Searched with session context:')).toBeVisible();
+  await page.getByRole('button', { name: 'Used earlier queries' }).click();
+  await expect(page.getByText('Your follow-up, read together with query 1.')).toBeVisible();
   await openTimeline(page);
   await expect(page.getByRole('navigation', { name: 'This session' }).getByRole('link')).toHaveCount(2);
 });
@@ -52,6 +53,37 @@ test('the timeline shows an earlier query as it was, with a way back to the late
   await openTimeline(page);
   await page.getByRole('link', { name: 'Back to latest' }).click();
   await expect(page).toHaveURL(/\/3$/);
+});
+
+test('the question header shows what was searched and lets you edit the question', async ({ page }) => {
+  await page.getByRole('link', { name: /^Open session: Outline engagement/ }).click();
+  const used = page.getByRole('button', { name: 'Used earlier queries' });
+  await expect(used).toHaveAttribute('aria-expanded', 'false');
+  await used.click();
+  await expect(used).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.getByText('Mesh-AI searched for')).toBeVisible();
+  await expect(page.getByText('Your follow-up, read together with queries 1 and 2.')).toBeVisible();
+  await page.getByRole('link', { name: 'Edit question' }).click();
+  await expect(page.getByLabel('Your question or search')).toHaveValue('Write this up as a report I can share with my team');
+});
+
+test('the session timeline stays in the margin at laptop widths', async ({ page }) => {
+  test.skip(isPhone(page), 'phones use the folded bar');
+  await page.setViewportSize({ width: 960, height: 720 });
+  await page.getByRole('link', { name: /^Open session: Outline engagement/ }).click();
+  const links = page.getByRole('navigation', { name: 'This session' }).getByRole('link');
+  await expect(links).toHaveCount(3);
+  for (const link of await links.all()) await expect(link).toBeVisible();
+  await expect(page.getByRole('button', { name: /This session/ })).toBeHidden();
+});
+
+test('on phones the folded timeline says which query is on screen', async ({ page }) => {
+  test.skip(!isPhone(page), 'only phones fold the timeline');
+  await page.getByRole('link', { name: /^Open session: Outline engagement/ }).click();
+  const bar = page.getByRole('button', { name: /This session/ });
+  await expect(bar).toContainText('Query 3 of 3');
+  await bar.click();
+  await expect(page.getByRole('navigation', { name: 'This session' }).getByRole('link', { name: /Outline engagement activities/ })).toBeVisible();
 });
 
 test('changing filters re-runs the question as a new query at the end of the session', async ({ page }) => {

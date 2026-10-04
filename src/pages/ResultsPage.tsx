@@ -52,11 +52,15 @@ export function ResultsPage() {
         onOpenFilters={() => setFiltersOpen(true)}
         onAsk={(text) => followUp(session, query, text)}
       />
-      <div className="mx-auto grid w-full max-w-[1180px] flex-1 grid-cols-[208px_minmax(0,800px)] items-start gap-x-11 gap-y-4 px-6 pb-14 pt-7 max-[1100px]:max-w-[848px] max-[1100px]:grid-cols-[minmax(0,1fr)]">
+      {/*
+        Session timeline in the left margin down to 900px wide (narrower margin from 1100px);
+        below 900px it folds into a "This session" bar above the question.
+      */}
+      <div className="mx-auto grid w-full max-w-[1180px] flex-1 grid-cols-[208px_minmax(0,800px)] items-start gap-x-11 gap-y-4 px-6 pb-14 pt-7 max-[1100px]:grid-cols-[184px_minmax(0,1fr)] max-[1100px]:gap-x-8 max-[900px]:max-w-[848px] max-[900px]:grid-cols-[minmax(0,1fr)]">
         <SessionTimeline session={session} current={query.n} />
         <main className="flex min-w-0 flex-col gap-[18px]">
-          <section aria-label="Question" className="flex flex-col gap-2.5">
-            <QuestionHeader query={query} />
+          <section aria-label="Question" className="flex flex-col gap-4">
+            <QuestionHeader key={query.id} query={query} />
             <FormatSwitch query={query} onChange={(f) => updateQuery(session.id, query.n, { formatChosen: f })} />
           </section>
           <AnswerCard

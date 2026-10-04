@@ -5,7 +5,7 @@ A clickable prototype of **Mesh-AI**, the search and answer service for [The Glo
 ## What it shows
 
 - **Home:** one search box with multi-select filters and an answer format choice, your three most recent sessions, and example questions.
-- **Results:** one bar pinned at the top (the follow-up box, Filters with a count, New search, All sessions). Below it, a session timeline in the left margin, the answer format switch, a written answer that streams in after the resources appear, the applied filters, and the numbered sources the answer cites.
+- **Results:** one bar pinned at the top (the follow-up box, Filters with a count, New search, All sessions). Below it, a session timeline in the left margin (folded into a "This session" bar on screens narrower than 900px), the question with **Used earlier queries** (what Mesh-AI searched for after reading a follow-up with the earlier queries) and **Edit question**, the answer format switch, a written answer that streams in after the resources appear, the applied filters, and the numbered sources the answer cites.
 - **All sessions:** every session saved in this browser, grouped by date, with search, sorting, each session's queries, and Clear all sessions.
 - **Filters dialog:** eight filters, each multi-select. A result matches any choice within a filter, and every filter in use.
 
@@ -18,7 +18,7 @@ A clickable prototype of **Mesh-AI**, the search and answer service for [The Glo
 | Change filters on the results page | Adds a query that re-runs the question on screen with the new filters |
 | Switch answer format | Re-formats the query on screen; no new query |
 | Select a query in the timeline | Shows it as it was |
-| New search (+) or Edit | Opens the home page; searching there starts a new session |
+| New search (+) or Edit question | Opens the home page; searching there starts a new session |
 
 ## Stack
 

@@ -8,29 +8,32 @@ import { TRIGGER_LABEL } from '@/lib/format';
 import { cn, plural } from '@/lib/utils';
 
 /*
-  The session's queries in order, in the left margin. On screens narrower than 1100px it
-  folds into a "This session" button above the question.
+  The session's queries in order, in the left margin. On screens narrower than 900px it
+  folds into a "This session" bar above the question, which says which query is on screen.
 */
 export function SessionTimeline({ session, current }: { session: Session; current: number }) {
   const [open, setOpen] = useState(false);
   const n = session.queries.length;
   const latest = session.queries[n - 1].n;
+  const position = session.queries.findIndex((q) => q.n === current) + 1;
   const started = daysAgo(session.startedAt) === 0 ? clock(session.startedAt) : shortDate(session.startedAt);
 
   return (
-    <nav aria-labelledby="session-title" className="sticky top-[84px] max-[1100px]:static">
+    <nav aria-labelledby="session-title" className="sticky top-[84px] max-[900px]:static">
       <button
         type="button"
         aria-expanded={open}
         onClick={() => setOpen(!open)}
-        className="hidden min-h-[42px] w-full items-center gap-2 rounded-[10px] border border-line bg-surface px-3 text-sm font-semibold text-ink-2 max-[1100px]:flex"
+        className="hidden min-h-[42px] w-full items-center gap-2 rounded-[10px] border border-line bg-surface px-3 text-sm font-semibold text-ink-2 max-[900px]:flex"
       >
         This session
-        <span className="font-normal text-muted-2">{plural(n, 'query', 'queries')}</span>
+        <span className="font-normal text-muted-2">
+          Query {position} of {n}
+        </span>
         <ChevronDown className={cn('ml-auto size-3.5 transition-transform', open && 'rotate-180')} strokeWidth={2.2} aria-hidden="true" />
       </button>
-      <div className={cn('max-[1100px]:mt-2 max-[1100px]:rounded-xl max-[1100px]:border max-[1100px]:border-line max-[1100px]:bg-surface max-[1100px]:px-3.5 max-[1100px]:pb-2 max-[1100px]:pt-3', !open && 'max-[1100px]:hidden')}>
-        <h2 id="session-title" className="m-0 text-[13px] font-semibold text-ink-2 max-[1100px]:sr-only">
+      <div className={cn('max-[900px]:mt-2 max-[900px]:rounded-xl max-[900px]:border max-[900px]:border-line max-[900px]:bg-surface max-[900px]:px-3.5 max-[900px]:pb-2 max-[900px]:pt-3', !open && 'max-[900px]:hidden')}>
+        <h2 id="session-title" className="m-0 text-[13px] font-semibold text-ink-2 max-[900px]:sr-only">
           This session
         </h2>
         <p className="mb-3 mt-0.5 text-xs text-muted-2">

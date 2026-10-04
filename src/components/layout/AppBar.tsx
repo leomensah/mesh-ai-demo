@@ -18,7 +18,8 @@ interface SessionsBarProps {
 /*
   The pinned top bar. On results it holds the only text box (the follow-up box) and the
   icon actions; on All sessions it holds just New search and the folder.
-  The 252px first column lines the follow-up box up with the answer column below.
+  The first column (240px, or 204px between 900px and 1100px wide) plus the 12px gap lines the follow-up box
+  up with the answer column below, next to the session timeline.
 */
 export function AppBar(props: ResultsBarProps | SessionsBarProps) {
   const [text, setText] = useState('');
@@ -38,7 +39,7 @@ export function AppBar(props: ResultsBarProps | SessionsBarProps) {
 
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-surface shadow-[0_1px_6px_rgba(21,36,31,0.06)]">
-      <div className="mx-auto grid max-w-[1180px] grid-cols-[252px_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2.5 px-6 py-2.5 max-[1100px]:grid-cols-[auto_minmax(0,1fr)_auto] max-[640px]:grid-cols-[minmax(0,1fr)_auto]">
+      <div className="mx-auto grid max-w-[1180px] grid-cols-[240px_minmax(0,1fr)_auto] items-center gap-x-3 gap-y-2.5 px-6 py-2.5 max-[1100px]:grid-cols-[204px_minmax(0,1fr)_auto] max-[900px]:grid-cols-[auto_minmax(0,1fr)_auto] max-[640px]:grid-cols-[minmax(0,1fr)_auto]">
         <Brand />
         {props.variant === 'results' ? (
           <form
